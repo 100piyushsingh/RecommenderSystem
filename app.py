@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import linear_kernel
 
 app = flask.Flask(__name__, template_folder='templates')
 
-df = pd.read_csv('./model/NetflixFlattened.csv')
+df = pd.read_csv('model/NetflixFlattened.csv')
 
 # Flattening the dataset
 single_col = ['type', 'rating']
