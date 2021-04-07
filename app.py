@@ -1,12 +1,16 @@
 import flask
 import difflib
+import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import linear_kernel
 
 app = flask.Flask(__name__, template_folder='templates')
 
-df2 = pd.read_csv('./model/NetflixFlattened.csv')
+df = pd.read_csv('./model/NetflixFlattened.csv')
+
+# Flattening the dataset
+single_col = ['type', 'rating']
+multi_col = ['director', 'cast', 'country', 'listed_in']
 
 binary_df = pd.DataFrame({'Index':df.index})
 binary_df = binary_df.set_index('Index')
