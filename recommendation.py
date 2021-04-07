@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import linear_kernel
 
-df = pd.read_csv('NetflixFlattened.csv')
+df = pd.read_csv('model/NetflixFlattened.csv')
 
 # Flattening the dataset
 single_col = ['type', 'rating']
