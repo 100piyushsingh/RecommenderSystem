@@ -47,7 +47,7 @@ cosine_sim = linear_kernel(binary_df, binary_df)
 # Construct a reverse map of indices and movie titles
 indices = pd.Series(df.index, index=df['title']).drop_duplicates()          
 
-def recommendation_engine(title):
+def results(title):
     
     title = title.lower()
     row_index = indices[title]
