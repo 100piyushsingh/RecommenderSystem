@@ -6,30 +6,56 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = flask.Flask(__name__, template_folder='templates')
 
-df2 = pd.read_csv('./model/tmdb.csv')
+df2 = pd.read_csv('./model/NetflixFlattened.csv')
 
-count = CountVectorizer(stop_words='english')
-count_matrix = count.fit_transform(df2['soup'])
+binary_df = pd.DataFrame({'Index':df.index})
+binary_df = binary_df.set_index('Index')
 
-cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+ 
+# Single Value
+for i in single_col:
+    for j in df[i].unique():
+        binary_df[j] = 0
+for i in range(len(df)):
+    row = df.index[i]
+    for j in single_col:
+        value = df[j][row]
+        binary_df.loc[row,value] = 1
+        
+# Multiple Value
 
-df2 = df2.reset_index()
-indices = pd.Series(df2.index, index=df2['title'])
-all_titles = [df2['title'][i] for i in range(len(df2['title']))]
+for i in multi_col:
+    unique_list = []
+    for j in df[i]:
+        for x in j:
+            unique_list.append(x)
+    unique_set = set(unique_list)
+    
+    for value in unique_set:
+        binary_df[value] = 0 
 
-def get_recommendations(title):
-    cosine_sim = cosine_similarity(count_matrix, count_matrix)
-    idx = indices[title]
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+for i in range(len(df)):
+    row = df.index[i]
+    for j in multi_col:
+        for value in df[j][row]:
+            binary_df.loc[row,value] = 1
+
+
+# Compute the cosine similarity matrix
+cosine_sim = linear_kernel(binary_df, binary_df)
+
+# Construct a reverse map of indices and movie titles
+indices = pd.Series(df.index, index=df['title']).drop_duplicates()          
+
+def recommendation_engine(title):
+    
+    title = title.lower()
+    row_index = indices[title]
+    sim_scores = list(enumerate(cosine_sim[row_index]))
+    sim_scores = sorted(sim_scores, key = lambda x: x[1], reverse = True)
     sim_scores = sim_scores[1:11]
     movie_indices = [i[0] for i in sim_scores]
-    tit = df2['title'].iloc[movie_indices]
-    dat = df2['release_date'].iloc[movie_indices]
-    return_df = pd.DataFrame(columns=['Title','Year'])
-    return_df['Title'] = tit
-    return_df['Year'] = dat
-    return return_df
+    return df.iloc[movie_indices]['title'].str.upper()
 
 # Set up the main route
 @app.route('/', methods=['GET', 'POST'])
@@ -45,12 +71,12 @@ def main():
         if m_name not in all_titles:
             return(flask.render_template('negative.html',name=m_name))
         else:
-            result_final = get_recommendations(m_name)
+            result_final = recommendation_engine(m_name)
             names = []
-            dates = []
+            #dates = []
             for i in range(len(result_final)):
-                names.append(result_final.iloc[i][0])
-                dates.append(result_final.iloc[i][1])
+                names.append(result_final.iloc[i])
+                #dates.append(result_final.iloc[i][1])
 
             return flask.render_template('positive.html',movie_names=names,movie_date=dates,search_name=m_name)
 
