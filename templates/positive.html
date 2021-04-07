@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,500&amp;display=swap'>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <style>
 html {
   box-sizing: border-box;
@@ -21,7 +22,7 @@ body {
   font-family: "Poppins", sans-serif;
   font-weight: 300;
   font-size: 100%;
-    background-color: #F1FDFF;
+    background-color: #ffffff;
   line-height: 1.5;
   color: #000;
 }
@@ -438,36 +439,28 @@ figure {
         border-radius: 20px;
         padding: 1em;
         width: auto;
-        box-shadow: 0px 0px 10px -4px grey;
+        box-shadow: 0px -10px 20px -5px #E2E2E2;
         text-align: center;
     }
-    #movie_name{
-        width: 70%;
-        padding: 1em;
-        border-radius: 5px;
-        text-align: center;
-        border: 1px solid grey;
-    }
-    #submission_button{
-        width: 25%;
-        padding: 1em;
-        margin: 1em;
-        border-radius: 5px;
-        color: white;
-        background-color:dodgerblue;
-        border-style: none;
-    }
+
     @media screen and (max-width:600px) {
         .movie{
             margin-top: 12vh;
             margin-bottom: 12vh;
         }
 }
+    table,tr,td,th{
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    td{
+      padding: 10px;  
+    }
+
 </style>
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<!-- Hamburger -->
+
 <div class="hamburger">
   <div class="hamburger__container">
     <span class="hamburger__top"></span>
@@ -535,21 +528,71 @@ figure {
   </div>
 </div>
 
-<!-- Demo -->
     <div class="movie">
-        <h2><u>Movie Recommendation System</u></h2>
-        <form action="{{ url_for('main') }}" method="POST">
-            <input type="text" id="movie_name" name="movie_name" placeholder="Enter a full movie name" required />
-            <input type="submit" id="submission_button" value="Submit"/>
-        </form>
-        <p style="color: #919191; padding: 1em;">The model uses <b>Content Based Recommendations</b> to find similar movies. Intuitive idea behind is <i>"If a person likes a particular item, he/she will also like an item that is similar to it."</i> The dataset is taken from <a href="https://www.kaggle.com/" target="_blank">Kaggle.com</a>.</p>
+        <h2><u>Recommendations:</u></h2>
+        <p>Showing results for: {{ search_name }}</p>
+        <table class="movie_table" align="center">
+            <tr>
+                <th>Movie Title</th>
+                <th>Release Date</th>
+            </tr>
+            <tbody class="table_body">
+                <tr>
+                    <td>{{ movie_names[0] }}</td>
+                    <td>{{ movie_date[0] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[1] }}</td>
+                    <td>{{ movie_date[1] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[2] }}</td>
+                    <td>{{ movie_date[2] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[3] }}</td>
+                    <td>{{ movie_date[3] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[4] }}</td>
+                    <td>{{ movie_date[4] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[5] }}</td>
+                    <td>{{ movie_date[5] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[6] }}</td>
+                    <td>{{ movie_date[6] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[7] }}</td>
+                    <td>{{ movie_date[7] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[8] }}</td>
+                    <td>{{ movie_date[8] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ movie_names[9] }}</td>
+                    <td>{{ movie_date[9] }}</td>
+                </tr>
+            </tbody>
+        </table>
         <br>
-        <p>Read more on recommendation systems on <a href="https://developers.google.com/machine-learning/recommendation" target="_blank">Google Developers Machine Learning Blogs</a>.</p>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <p style="margin-top:3em;">
+        Liked it? Spend a moment from you precious time to provide us valuable feedback. <i class="fas fa-smile"></i> Thank you <i class="fas fa-heart"></i>
+        </p>
+        <p style="color: #919191;">Feedback: <a href="https://forms.gle/7NGyYAvSe7Fepm68A">Google Form Link</a></p>
+        <p style="margin-bottom: 2em; border: 1px solid grey;">Read more on recommendation systems on <a href="https://developers.google.com/machine-learning/recommendation" target="_blank">Google Developers Machine Learning Blogs</a>.</p>
   </div>
 <!-- partial -->
   <script src='https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js'></script>
 <script>
+    
+    
 // Menu
 const Menu = (() => {
   let s;
